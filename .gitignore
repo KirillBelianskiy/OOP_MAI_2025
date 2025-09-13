@@ -39,3 +39,11 @@
 
 # debug information files
 *.dwo
+
+# macOS specific
+.DS_Store
+
+# CLion specific
+.idea/
+cmake-build-debug/
+cmake-build-release/
