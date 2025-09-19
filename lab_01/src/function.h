@@ -8,9 +8,7 @@ private:
     std::string message;
 
 public:
-    Exception(std::string message) noexcept : message(message)
-    {
-    }
+    Exception(std::string message) noexcept : message(message) { }
 
     const char* what() const noexcept override { return message.c_str(); }
 };
@@ -18,9 +16,7 @@ public:
 class InvalidInput : public Exception
 {
 public:
-    InvalidInput(std::string message) : Exception(message)
-    {
-    }
+    InvalidInput(std::string message) : Exception(message) { }
 };
 
 
