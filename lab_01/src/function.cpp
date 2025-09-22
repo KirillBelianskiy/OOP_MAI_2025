@@ -1,7 +1,9 @@
 #include "function.h"
 #include <vector>
+#include <string>
+#include <stdexcept>
 
-int Solution::couting_units(int n)
+int couting_units(int n)
 {
     std::string bin_str = "";
     while (n > 0)
@@ -12,14 +14,14 @@ int Solution::couting_units(int n)
     int count = 0;
     for (int i = 0; i < bin_str.size(); i++)
     {
-        count += (bin_str[i] == '1') ? 1 : 0;
+        count += bin_str[i] == '1' ? 1 : 0;
     }
     return count;
 }
 
-int Solution::calculate_sum_range(int start, int end)
+int calculate_sum_range(int start, int end)
 {
-    if (start < 0 || end < 0 || start > end) throw InvalidInput("Invalid input");
+    if (start < 0 || end < 0 || start > end) throw std::invalid_argument("Invalid Range");
 
     std::vector<int> v;
     for (int i = 0; i <= end - start; i++) v.push_back(couting_units(start + i));

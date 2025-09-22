@@ -4,18 +4,13 @@
 int main()
 {
 
-    Solution solution;
     int a, b;
     std::cin >> a >> b;
     try
     {
-        std::cout << solution.calculate_sum_range(a, b) << std::endl;
+        std::cout << calculate_sum_range(a, b) << std::endl;
     }
-    catch (InvalidInput& e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    catch (Exception& e)
+    catch (const std::invalid_argument& e)
     {
         std::cout << e.what() << std::endl;
     }
