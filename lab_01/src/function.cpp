@@ -3,7 +3,7 @@
 #include <string>
 #include <stdexcept>
 
-int couting_units(int n)
+int counting_units(int n)
 {
     std::string bin_str = "";
     while (n > 0)

@@ -15,7 +15,10 @@ Seven::Seven(const size_t& n, unsigned char* t)
     for (size_t i = 0; i < size; i++)
     {
         if (t[i] > 6)
+        {
+            delete[] digits;
             throw std::out_of_range("digit out of range (0..6)");
+        }
         digits[i] = t[i];
     }
 }
@@ -29,7 +32,10 @@ Seven::Seven(const std::initializer_list<unsigned char>& t)
     for (const auto& x : t)
     {
         if (x > 6)
+        {
+            delete[] digits;
             throw std::out_of_range("digit out of range (0..6)");
+        }
         digits[i] = x;
         i++;
     }
@@ -44,7 +50,10 @@ Seven::Seven(const std::string& t)
     {
         char c = t[i];
         if (c < '0' || c > '6')
+        {
+            delete[] digits;
             throw std::out_of_range("invalid digit in string");
+        }
         digits[size - i - 1] = t[i] - '0';
     }
 }
@@ -66,32 +75,6 @@ Seven::Seven(Seven&& other) noexcept
     digits = other.digits;
     other.digits = nullptr;
     other.size = 0;
-}
-
-Seven& Seven::operator=(const Seven& other)
-{
-    if (this == &other) return *this;
-
-    delete[] digits;
-    size = other.size;
-    digits = size > 0 ? new unsigned char[size] : nullptr;
-    for (size_t i = 0; i < size; i++)
-    {
-        digits[i] = other.digits[i];
-    }
-    return *this;
-}
-
-Seven& Seven::operator=(Seven&& other) noexcept
-{
-    if (this == &other) return *this;
-
-    delete[] digits;
-    size = other.size;
-    digits = other.digits;
-    other.digits = nullptr;
-    other.size = 0;
-    return *this;
 }
 
 Seven::~Seven() noexcept

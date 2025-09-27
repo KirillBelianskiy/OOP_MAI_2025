@@ -13,8 +13,8 @@ public:
     Seven(const std::initializer_list<unsigned char>& t);
     Seven(const std::string& t);
 
-    Seven& operator=(const Seven& other);
-    Seven& operator=(Seven&& other) noexcept;
+    Seven& operator=(const Seven& other) = delete;
+    Seven& operator=(Seven&& other) noexcept = delete;
 
     Seven(const Seven& other);
     Seven(Seven&& other) noexcept;
