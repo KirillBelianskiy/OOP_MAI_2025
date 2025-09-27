@@ -24,7 +24,7 @@ int calculate_sum_range(int start, int end)
     if (start < 0 || end < 0 || start > end) throw std::invalid_argument("Invalid Range");
 
     std::vector<int> v;
-    for (int i = 0; i <= end - start; i++) v.push_back(couting_units(start + i));
+    for (int i = 0; i <= end - start; i++) v.push_back(counting_units(start + i));
 
     int res = 0;
     for (int i = 0; i <= end - start; i++) res += v[i];
