@@ -6,31 +6,38 @@ class Exception : public std::exception
 {
 private:
     std::string message;
+
 public:
-    Exception(std::string message) noexcept : message(message) { }
+    Exception(std::string message) noexcept : message(message)
+    {
+    }
+
     const char* what() const noexcept override { return message.c_str(); }
-    virtual ~Exception() { }
 };
 
 class InvalidInput : public Exception
 {
 public:
-    InvalidInput(std::string message) : Exception(message) { }
+    InvalidInput(std::string message) : Exception(message)
+    {
+    }
 };
 
 class OutOfRange : public Exception
 {
 public:
-        OutOfRange(std::string message) : Exception(message) { }
+    OutOfRange(std::string message) : Exception(message)
+    {
+    }
 };
-
 
 
 class Seven
 {
 private:
-    unsigned char* digits {nullptr};
-    size_t size {0};
+    unsigned char* digits{nullptr};
+    size_t size{0};
+
 public:
     Seven();
     Seven(const size_t& n, unsigned char* t);

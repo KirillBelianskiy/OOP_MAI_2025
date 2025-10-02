@@ -24,7 +24,7 @@ Seven::Seven(const std::initializer_list<unsigned char>& t)
     size = t.size();
     digits = size > 0 ? new unsigned char[size] : nullptr;
     size_t i = 0;
-    for (const auto& x: t)
+    for (const auto& x : t)
     {
         if (x > 6)
             throw OutOfRange("Out of range: digit must be 0..6");
@@ -100,15 +100,15 @@ Seven Seven::add(const Seven& other) const
 {
     size_t max_size = std::max(size, other.size);
     unsigned char* result_digits = new unsigned char[max_size + 1]();
-    
+
     unsigned char carry = 0;
     size_t result_size = 0;
-    
+
     for (size_t i = 0; i < max_size || carry > 0; i++)
     {
         unsigned char digit1 = i < size ? digits[i] : 0;
         unsigned char digit2 = i < other.size ? other.digits[i] : 0;
-        
+
         unsigned char sum = static_cast<unsigned char>(digit1 + digit2 + carry);
         result_digits[i] = static_cast<unsigned char>(sum % 7);
         carry = static_cast<unsigned char>(sum / 7);
@@ -117,7 +117,7 @@ Seven Seven::add(const Seven& other) const
 
     Seven result(result_size, result_digits);
     delete[] result_digits;
-    
+
     return result;
 }
 
@@ -127,17 +127,17 @@ Seven Seven::subtract(const Seven& other) const
     {
         return Seven();
     }
-    
+
     unsigned char* result_digits = new unsigned char[size]();
     unsigned char borrow = 0;
-    
+
     for (size_t i = 0; i < size; i++)
     {
         unsigned char digit1 = digits[i];
         unsigned char digit2 = (i < other.size) ? other.digits[i] : 0;
-        
+
         int diff = static_cast<int>(digit1) - static_cast<int>(digit2) - static_cast<int>(borrow);
-        
+
         if (diff < 0)
         {
             diff += 7;
@@ -147,7 +147,7 @@ Seven Seven::subtract(const Seven& other) const
         {
             borrow = 0;
         }
-        
+
         result_digits[i] = static_cast<unsigned char>(diff);
     }
 
@@ -159,7 +159,7 @@ Seven Seven::subtract(const Seven& other) const
 
     Seven result(result_size, result_digits);
     delete[] result_digits;
-    
+
     return result;
 }
 
@@ -177,7 +177,7 @@ bool Seven::is_greater(const Seven& other) const
 {
     if (size > other.size) return true;
     if (size < other.size) return false;
-    for (size_t i = size; i-- > 0; )
+    for (size_t i = size; i-- > 0;)
     {
         if (digits[i] > other.digits[i]) return true;
         if (digits[i] < other.digits[i]) return false;
@@ -189,7 +189,7 @@ bool Seven::is_less(const Seven& other) const
 {
     if (size < other.size) return true;
     if (size > other.size) return false;
-    for (size_t i = size; i-- > 0; )
+    for (size_t i = size; i-- > 0;)
     {
         if (digits[i] < other.digits[i]) return true;
         if (digits[i] > other.digits[i]) return false;
