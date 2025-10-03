@@ -1,6 +1,7 @@
 #include "classes.h"
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 
 Seven::Seven() = default;
@@ -8,13 +9,13 @@ Seven::Seven() = default;
 Seven::Seven(const size_t& n, unsigned char* t)
 {
     size = n;
-    if (size <= 0) throw InvalidInput("Invalid input: size cannot be less than zero.");
-    if (t == nullptr) throw InvalidInput("Invalid input: pointer to digits cannot be null.");
+    if (size <= 0) throw std::invalid_argument("size must be > 0");
+    if (t == nullptr) throw std::invalid_argument("array pointer cannot be null");
     digits = size > 0 ? new unsigned char[size] : nullptr;
     for (size_t i = 0; i < size; i++)
     {
         if (t[i] > 6)
-            throw OutOfRange("Out of range: digit must be 0..6");
+            throw std::out_of_range("digit out of range (0..6)");
         digits[i] = t[i];
     }
 }
@@ -22,12 +23,13 @@ Seven::Seven(const size_t& n, unsigned char* t)
 Seven::Seven(const std::initializer_list<unsigned char>& t)
 {
     size = t.size();
-    digits = size > 0 ? new unsigned char[size] : nullptr;
+    if (size == 0) throw std::invalid_argument("initializer_list cannot be empty");
     size_t i = 0;
+    digits = new unsigned char[size];
     for (const auto& x : t)
     {
         if (x > 6)
-            throw OutOfRange("Out of range: digit must be 0..6");
+            throw std::out_of_range("digit out of range (0..6)");
         digits[i] = x;
         i++;
     }
@@ -36,13 +38,14 @@ Seven::Seven(const std::initializer_list<unsigned char>& t)
 Seven::Seven(const std::string& t)
 {
     size = t.length();
-    digits = size > 0 ? new unsigned char[size] : nullptr;
+    if (size == 0) throw std::invalid_argument("string cannot be empty");
+    digits = new unsigned char[size];
     for (size_t i = 0; i < size; i++)
     {
         char c = t[i];
         if (c < '0' || c > '6')
-            throw InvalidInput("Invalid input: invalid character in string (must be '0'..'6')");
-        digits[size - i - 1] = static_cast<unsigned char>(c - '0');
+            throw std::out_of_range("invalid digit in string");
+        digits[size - i - 1] = t[i] - '0';
     }
 }
 
