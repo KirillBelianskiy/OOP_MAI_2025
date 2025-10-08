@@ -13,12 +13,12 @@ public:
     Seven(const std::initializer_list<unsigned char>& t);
     Seven(const std::string& t);
 
-    Seven& operator=(const Seven& other) = delete;
-    Seven& operator=(Seven&& other) noexcept = delete;
-
     Seven(const Seven& other);
     Seven(Seven&& other) noexcept;
     virtual ~Seven() noexcept;
+
+    Seven& operator=(const Seven& other) = delete;
+    Seven& operator=(Seven&& other) noexcept = delete;
 
     Seven add(const Seven& other) const;
     Seven subtract(const Seven& other) const;

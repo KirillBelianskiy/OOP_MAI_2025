@@ -4,14 +4,20 @@
 #include <stdexcept>
 
 
-Seven::Seven() = default;
+Seven::Seven()
+{
+    size = 1;
+    digits = new unsigned char[size];
+    digits[0] = 0;
+};
 
 Seven::Seven(const size_t& n, unsigned char* t)
 {
     size = n;
     if (size <= 0) throw std::invalid_argument("size must be > 0");
     if (t == nullptr) throw std::invalid_argument("array pointer cannot be null");
-    digits = size > 0 ? new unsigned char[size] : nullptr;
+
+    digits = new unsigned char[size];
     for (size_t i = 0; i < size; i++)
     {
         if (t[i] > 6)
@@ -27,6 +33,7 @@ Seven::Seven(const std::initializer_list<unsigned char>& t)
 {
     size = t.size();
     if (size == 0) throw std::invalid_argument("initializer_list cannot be empty");
+
     size_t i = 0;
     digits = new unsigned char[size];
     for (const auto& x : t)
@@ -45,6 +52,7 @@ Seven::Seven(const std::string& t)
 {
     size = t.length();
     if (size == 0) throw std::invalid_argument("string cannot be empty");
+
     digits = new unsigned char[size];
     for (size_t i = 0; i < size; i++)
     {
@@ -62,7 +70,8 @@ Seven::Seven(const std::string& t)
 Seven::Seven(const Seven& other)
 {
     size = other.size;
-    digits = size > 0 ? new unsigned char[size] : nullptr;
+    digits = new unsigned char[size];
+
     for (size_t i = 0; i < size; i++)
     {
         digits[i] = other.digits[i];
@@ -85,7 +94,7 @@ Seven::~Seven() noexcept
 Seven Seven::add(const Seven& other) const
 {
     size_t max_size = std::max(size, other.size);
-    unsigned char* result_digits = new unsigned char[max_size + 1]();
+    unsigned char* result_digits = new unsigned char[max_size + 1];
 
     unsigned char carry = 0;
     size_t result_size = 0;
@@ -114,7 +123,7 @@ Seven Seven::subtract(const Seven& other) const
         return Seven();
     }
 
-    unsigned char* result_digits = new unsigned char[size]();
+    unsigned char* result_digits = new unsigned char[size];
     unsigned char borrow = 0;
 
     for (size_t i = 0; i < size; i++)
@@ -185,7 +194,6 @@ bool Seven::is_less(const Seven& other) const
 
 std::string Seven::to_string() const
 {
-    if (size == 0) return "0";
     std::string res;
     res.reserve(size);
     for (size_t i = size; i-- > 0;)

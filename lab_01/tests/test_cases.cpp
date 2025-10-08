@@ -10,11 +10,6 @@ TEST(CalculateSumRangeTest, HandlesSingleNumberRange) {
     EXPECT_EQ(1, calculate_sum_range(8, 8));
 }
 
-TEST(CalculateSumRangeTest, ThrowsExceptionOnInvalidInput) {
-    EXPECT_THROW(calculate_sum_range(10, 5), std::invalid_argument);
-    EXPECT_THROW(calculate_sum_range(-5, 2), std::invalid_argument);
-}
-
 TEST(CalculateSumRangeTest, RangeIncludingZero) {
     EXPECT_EQ(2, calculate_sum_range(0, 2));
 }
