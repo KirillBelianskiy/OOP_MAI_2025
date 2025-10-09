@@ -1,4 +1,5 @@
 #include "classes.h"
+
 #include <iostream>
 #include <algorithm>
 #include <stdexcept>
@@ -172,11 +173,13 @@ bool Seven::is_greater(const Seven& other) const
 {
     if (size > other.size) return true;
     if (size < other.size) return false;
-    for (size_t i = size; i-- > 0;)
+
+    for (size_t i = size; i > 0; --i)
     {
-        if (digits[i] > other.digits[i]) return true;
-        if (digits[i] < other.digits[i]) return false;
+        if (digits[i - 1] > other.digits[i - 1]) return true;
+        if (digits[i - 1] < other.digits[i - 1]) return false;
     }
+
     return false;
 }
 
@@ -184,11 +187,13 @@ bool Seven::is_less(const Seven& other) const
 {
     if (size < other.size) return true;
     if (size > other.size) return false;
-    for (size_t i = size; i-- > 0;)
+
+    for (size_t i = size; i > 0; --i)
     {
-        if (digits[i] < other.digits[i]) return true;
-        if (digits[i] > other.digits[i]) return false;
+        if (digits[i - 1] < other.digits[i - 1]) return true;
+        if (digits[i - 1] > other.digits[i - 1]) return false;
     }
+
     return false;
 }
 
