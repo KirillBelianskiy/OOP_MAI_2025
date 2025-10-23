@@ -4,6 +4,23 @@
 
 #include "classes.h"
 
+const double EPSILON = 1e-9;
+
+bool eq(double a, double b)
+{
+    return abs(a - b) < EPSILON;
+}
+
+bool less(double a, double b)
+{
+    return (b - a) > EPSILON;
+}
+
+bool greater(double a, double b)
+{
+    return (a - b) > EPSILON;
+}
+
 std::ostream& operator<<(std::ostream& os, const Figure& figure)
 {
     figure.print(os);
@@ -25,10 +42,10 @@ Triangle::Triangle(
     double a_b = sqrt(pow(b.first - a.first, 2) + pow(b.second - a.second, 2));
     double a_c = sqrt(pow(c.first - a.first, 2) + pow(c.second - a.second, 2));
     double b_c = sqrt(pow(c.first - b.first, 2) + pow(c.second - b.second, 2));
-    double epsilon = 1e-9;
-    if ((a_b + a_c) <= (b_c + epsilon) ||
-        (a_c + b_c) <= (a_b + epsilon) ||
-        (b_c + a_b) <= (a_c + epsilon))
+
+    if ((less(a_b + a_c, b_c) || eq(a_b + a_c, b_c)) ||
+        (less(a_c + b_c, a_b) || eq(a_c + b_c, a_b)) ||
+        (less(b_c + a_b, a_c) || eq(b_c + a_b, a_c)))
     {
         throw std::invalid_argument("invalid triangle coords");
     }
@@ -84,10 +101,10 @@ void Triangle::read(std::istream& is)
     double a_b = sqrt(pow(b.first - a.first, 2) + pow(b.second - a.second, 2));
     double a_c = sqrt(pow(c.first - a.first, 2) + pow(c.second - a.second, 2));
     double b_c = sqrt(pow(c.first - b.first, 2) + pow(c.second - b.second, 2));
-    double epsilon = 1e-9;
-    if ((a_b + a_c) <= (b_c + epsilon) ||
-        (a_c + b_c) <= (a_b + epsilon) ||
-        (b_c + a_b) <= (a_c + epsilon))
+
+    if ((less(a_b + a_c, b_c) || eq(a_b + a_c, b_c)) ||
+        (less(a_c + b_c, a_b) || eq(a_c + b_c, a_b)) ||
+        (less(b_c + a_b, a_c) || eq(b_c + a_b, a_c)))
     {
         throw std::invalid_argument("invalid triangle coords");
     }
@@ -114,7 +131,8 @@ Triangle& Triangle::operator=(Triangle&& other) noexcept
 
 bool Triangle::operator==(const Triangle& other) const
 {
-    return a == other.a && b == other.b && c == other.c;
+    return eq(a.first, other.a.first) && eq(a.second, other.a.second) && eq(b.first, other.b.first) && eq(
+        b.second, other.b.second) && eq(c.first, other.c.first) && eq(c.second, other.c.second);
 }
 
 Rectangle::Rectangle(std::pair<double, double> left_point, std::pair<double, double> right_point)
@@ -122,7 +140,7 @@ Rectangle::Rectangle(std::pair<double, double> left_point, std::pair<double, dou
     double width = std::abs(right_point.first - left_point.first);
     double height = std::abs(right_point.second - left_point.second);
 
-    if (width <= 0 || height <= 0)
+    if ((less(width, 0.0) || eq(width, 0.0)) || (less(height, 0.0) || eq(height, 0.0)))
     {
         throw std::invalid_argument("invalid rectangle coords: width and height must be positive");
     }
@@ -167,7 +185,12 @@ void Rectangle::print(std::ostream& os) const
 void Rectangle::read(std::istream& is)
 {
     is >> left_point.first >> left_point.second >> right_point.first >> right_point.second;
-    if (!(abs(left_point.first - right_point.first) * abs(left_point.second - right_point.second) > 0))
+
+    double width = std::abs(left_point.first - right_point.first);
+    double height = std::abs(left_point.second - right_point.second);
+    double area = width * height;
+
+    if (less(area, 0.0) || eq(area, 0.0))
     {
         throw std::invalid_argument("invalid rectangle coords");
     }
@@ -191,7 +214,8 @@ Rectangle& Rectangle::operator=(Rectangle&& other) noexcept
 
 bool Rectangle::operator==(const Rectangle& other) const
 {
-    return this->left_point == other.left_point && this->right_point == other.right_point;
+    return eq(left_point.first, other.left_point.first) && eq(left_point.second, other.left_point.second) && eq(
+        right_point.first, other.right_point.first) && eq(right_point.second, other.right_point.second);
 }
 
 Square::Square(std::pair<double, double> left_point, std::pair<double, double> top_right)
@@ -200,8 +224,7 @@ Square::Square(std::pair<double, double> left_point, std::pair<double, double> t
     double width = std::abs(right_point.first - left_point.first);
     double height = std::abs(right_point.second - left_point.second);
 
-    const double epsilon = 1e-9;
-    if (std::abs(width - height) > epsilon)
+    if (!eq(width, height))
     {
         throw std::invalid_argument("invalid square coords: sides must be equal");
     }
@@ -228,9 +251,10 @@ void Square::read(std::istream& is)
 
     double width = std::abs(right_point.first - left_point.first);
     double height = std::abs(right_point.second - left_point.second);
-    const double epsilon = 1e-9;
 
-    if (width <= 0 || height <= 0 || std::abs(width - height) > epsilon)
+    if ((less(width, 0.0) || eq(width, 0.0)) || // width <= 0
+        (less(height, 0.0) || eq(height, 0.0)) || // height <= 0
+        !eq(width, height)) // width != height
     {
         throw std::invalid_argument("invalid square coords");
     }
@@ -250,5 +274,6 @@ Square& Square::operator=(Square&& other) noexcept
 
 bool Square::operator==(const Square& other) const
 {
-    return this->left_point == other.left_point && this->right_point == other.right_point;
+    return eq(left_point.first, other.left_point.first) && eq(left_point.second, other.left_point.second) && eq(
+        right_point.first, other.right_point.first) && eq(right_point.second, other.right_point.second);
 }
